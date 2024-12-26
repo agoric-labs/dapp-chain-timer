@@ -1,12 +1,10 @@
 # Agoric Dapp: Dapp-Ed-Cert
 
-Dapp-Ed-Cert is a simple Dapp for the [Agoric smart contract platform](https://docs.agoric.com/) that permits users to add educational certificates to the Agoric blockchain. This Dapp is designed for educational institutions, certification authorities, and students who need a secure and verifiable way to store and share educational credentials. 
+Dapp-Chain-Timer is a simple Dapp for the [Agoric smart contract platform](https://docs.agoric.com/) that illustrates the use `ChainTimerService` and displays and compares the time inside the chain and the user machine.
 
-Users are given a simple form in which to enter student's personal information and certification details. This data is then sent to the contract to be added to the Agoric VStorage, ensuring that the information is tamper-proof and easily accessible. By leveraging the Agoric blockchain, Dapp-Ed-Cert provides a transparent and reliable method for managing educational certificates, reducing the risk of fraud and simplifying the verification process for employers and other institutions.
+_Note that this is a example dapp exploring capabilities of ChainTimerService and Agoric VStorage with no consideration made for privacy of information. All entered data maybe publicly visible._
 
-_Note that this is a example dapp exploring capabilities of Agoric VStorage with no consideration made for privacy of information. All entered data maybe publicly visible._
-
-This is the user interface of dapp:
+<!-- This is the user interface of dapp:
 
 <p align="center">
     <img src="ui/public/ui-dapp.png" alt="Edu Cert Dapp" width="700">
@@ -16,7 +14,7 @@ This is how the data looks like in VStorage:
 
 <p align="center">
     <img src="/ui/public//ui-vstorage.png" alt="Edu Cert Dapp" width="500">
-</p>
+</p> -->
 
 ## Getting started
 - run the `yarn install` command to install any solution dependencies. *Downloading all the required dependencies may take several minutes. The UI depends on the React framework, and the contract depends on the Agoric framework. The packages in this project also have development dependencies for testing, code formatting, and static analysis.*
