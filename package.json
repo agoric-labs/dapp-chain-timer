@@ -1,0 +1,74 @@
+{
+  "name": "dapp-chain-timer",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "Apache-2.0",
+  "private": true,
+  "packageManager": "yarn@4.4.0",
+  "useWorkspaces": true,
+  "workspaces": [
+    "contract",
+    "ui"
+  ],
+  "resolutions-note": "needed until @agoric/orchestration is available using this",
+  "resolutions": {
+    "@noble/hashes": "^1.5.0",
+    "aggregate-error": "3.0.0",
+    "esm": "github:agoric-labs/esm.git#Agoric-built",
+    "ws": "^8.17.1",
+    "@agoric/deploy-script-support": "^0.10.4-u16.2"
+  },
+  "scripts": {
+    "start:docker": "cd contract && docker compose up -d",
+    "stop:docker": "cd contract && docker compose down",
+    "docker:logs": "cd contract; docker compose logs --tail 200 -f",
+    "docker:bash": "cd contract; docker compose exec agd bash",
+    "docker:make": "cd contract; docker compose exec agd make -C /workspace/contract",
+    "make:help": "make -C contract list",
+    "start:contract": "cd contract && yarn start",
+    "integration-test": "cd contract && yarn ava ./test/chain-timer-multichain.test.js",
+    "start:ui": "cd ui && yarn dev",
+    "format": "yarn prettier --write .github contract ui",
+    "lint:format": "yarn prettier --check .github contract ui",
+    "lint": "yarn lint:format && yarn workspaces foreach --all run lint",
+    "lint:fix": "yarn format && yarn workspaces foreach --all run lint:fix",
+    "test": "yarn workspaces foreach --all run test",
+    "build": "yarn workspaces foreach --all run build",
+    "postinstall": "npx patch-package"
+  },
+  "devDependencies": {
+    "@types/node": "npm:20.16.8",
+    "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.5.11",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.1",
+    "typescript": "^5.5.2"
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "arrowParens": "avoid",
+    "singleQuote": true,
+    "plugins": [
+      "prettier-plugin-tailwindcss"
+    ]
+  },
+  "nohoist": [
+    "**/ava",
+    "**/ava/**",
+    "**/tsx",
+    "**/tsx/**",
+    "contract/**",
+    "contract/**/@endo/**",
+    "**/@endo/ses-ava",
+    "**/@noble/hashes",
+    "**/@noble/hashes/**",
+    "**/starshipjs",
+    "**/starshipjs/**",
+    "**/@agoric/cosmic-proto",
+    "**/@agoric/cosmic-proto/**"
+  ],
+  "dependencies": {
+    "@endo/far": "^1.1.8",
+    "axios": "^0.28.0"
+  }
+}
