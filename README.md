@@ -1,4 +1,4 @@
-# Agoric Dapp: Dapp-Ed-Cert
+# Agoric Dapp: Dapp-Chain-Timer
 
 Dapp-Chain-Timer is a simple Dapp for the [Agoric smart contract platform](https://docs.agoric.com/) that illustrates the use `ChainTimerService` and displays and compares the time inside the chain and the user machine.
 
