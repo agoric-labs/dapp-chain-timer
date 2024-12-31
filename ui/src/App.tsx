@@ -75,6 +75,8 @@ const TimeDisplay: React.FC<TimeDisplayProps> = ({ title, time, color }) => (
     background: 'rgba(255, 255, 255, 0.05)',
     boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
     backdropFilter: 'blur(4px)',
+    width: '600px',
+    minHeight: '200px',
   }}>
     <h2 style={{ 
       fontSize: '2.5rem', 
