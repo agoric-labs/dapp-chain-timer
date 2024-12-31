@@ -1,7 +1,9 @@
-// @ts-check
+// @ts-nocheck
 import { E, Far } from '@endo/far';
 import { M } from '@endo/patterns';
 import '@agoric/zoe/exported.js';
+import { TimeMath } from '@agoric/time';
+
 /**
  * @typedef {{
  * maxCertificates: bigint;
@@ -18,12 +20,11 @@ export const meta = {
  * @param {ZCF<CertificateTerms>} zcf
  */
 export const start = async (zcf, privateArgs) => {
-
   // Create storage node for time data
-  const timeDataRoot = await E(privateArgs.storageNode).makeChildNode(
-    'Time',
-  );
+  const timeDataRoot = await E(privateArgs.storageNode).makeChildNode('Time');
 
+  const timerBrand = await E(privateArgs.timerService).getTimerBrand();
+  const toRT = value => TimeMath.coerceRelativeTimeRecord(value, timerBrand);
 
   /**
    * Store time data in VStorage
@@ -32,22 +33,21 @@ export const start = async (zcf, privateArgs) => {
   const storeTimeData = async data => {
     try {
       const myTime = await E(privateArgs.timerService).getCurrentTimestamp();
-      
       await E(timeDataRoot).setValue(JSON.stringify(`${myTime.absValue}`));
-
+      await E(privateArgs.timerService).setWakeup(
+        TimeMath.addAbsRel(myTime, 1n),
+        handler,
+      );
       return 'Time data published successfully';
     } catch (error) {
-      console.error(
-        `Error publishing Time data:${error}`,
-      );
-      return harden(
-        new Error(
-          `Error publishing Time data:${error}`,
-        ),
-      );
+      console.error(`Error publishing Time data:${error}`);
+      return harden(new Error(`Error publishing Time data:${error}`));
     }
   };
-
+  // callback-based API functions need a handler object
+  const handler = Far('handler', {
+    wake: storeTimeData,
+  });
 
   const proposalShape = harden({
     exit: M.any(),
@@ -64,7 +64,6 @@ export const start = async (zcf, privateArgs) => {
     const { timeData } = offerArgs;
 
     try {
-     
       // Store the time data
       await storeTimeData(timeData);
 
@@ -84,15 +83,15 @@ export const start = async (zcf, privateArgs) => {
       proposalShape,
     );
 
+  // To verify do the following on chain: agd q vstorage data published.chainTimer.Time
   // Function to write the current timestamp every 5 seconds
   const writeTimestampPeriodically = async () => {
-    while (true) {
-      const currentTime = await E(
-        privateArgs.timerService,
-      ).getCurrentTimestamp();
-      await storeTimeData({ timestamp: currentTime });
-      await E(privateArgs.timerService).wakeAt(5n);
-    }
+    // wake up at least 1 seconds from now:
+    let now = await E(privateArgs.timerService).getCurrentTimestamp();
+    await E(privateArgs.timerService).setWakeup(
+      TimeMath.addAbsRel(now, 1n),
+      handler,
+    );
   };
 
   // Start the periodic timestamp writing
