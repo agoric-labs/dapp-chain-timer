@@ -8,7 +8,9 @@ const ENDPOINTS = {
 
 const App: React.FC = () => {
   const [chainTime, setChainTime] = useState<string | null>(null);
-  const [clientTime, setClientTime] = useState<string>(new Date().toLocaleTimeString());
+  const [clientTime, setClientTime] = useState<string>(
+    new Date().toLocaleTimeString(),
+  );
 
   useEffect(() => {
     const fetchTime = async () => {
@@ -17,9 +19,9 @@ const App: React.FC = () => {
       );
       const data = await response.json();
       const parsedData = JSON.parse(JSON.parse(data.value).values);
-      
-      let timestampSeconds = (parsedData).toString();
-      const date = new Date(timestampSeconds*1000);
+
+      let timestampSeconds = parsedData.toString();
+      const date = new Date(timestampSeconds * 1000);
       setChainTime(date.toUTCString());
     };
 
@@ -37,15 +39,18 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="app-container" style={{
-      height: '100vh',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: '6rem',
-      background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
-      color: '#fff',
-    }}>
+    <div
+      className="app-container"
+      style={{
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: '6rem',
+        background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+        color: '#fff',
+      }}
+    >
       <TimeDisplay
         title="Time on Chain"
         time={chainTime !== null ? chainTime : 'Loading...'}
@@ -68,32 +73,38 @@ interface TimeDisplayProps {
 }
 
 const TimeDisplay: React.FC<TimeDisplayProps> = ({ title, time, color }) => (
-  <div style={{ 
-    textAlign: 'center',
-    padding: '2rem',
-    borderRadius: '15px',
-    background: 'rgba(255, 255, 255, 0.05)',
-    boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-    backdropFilter: 'blur(4px)',
-    width: '600px',
-    minHeight: '200px',
-  }}>
-    <h2 style={{ 
-      fontSize: '2.5rem', 
-      marginBottom: '3rem',
-      color: color,
-      textTransform: 'uppercase',
-      letterSpacing: '2px',
-      fontWeight: '600',
-    }}>
+  <div
+    style={{
+      textAlign: 'center',
+      padding: '2rem',
+      borderRadius: '15px',
+      background: 'rgba(255, 255, 255, 0.05)',
+      boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+      backdropFilter: 'blur(4px)',
+      width: '600px',
+      minHeight: '200px',
+    }}
+  >
+    <h2
+      style={{
+        fontSize: '2.5rem',
+        marginBottom: '3rem',
+        color: color,
+        textTransform: 'uppercase',
+        letterSpacing: '2px',
+        fontWeight: '600',
+      }}
+    >
       {title}
     </h2>
-    <div style={{ 
-      fontSize: '2.5rem', 
-      fontWeight: 'bold',
-      color: '#ffffff',
-      textShadow: '0 0 10px rgba(255,255,255,0.3)',
-    }}>
+    <div
+      style={{
+        fontSize: '2.5rem',
+        fontWeight: 'bold',
+        color: '#ffffff',
+        textShadow: '0 0 10px rgba(255,255,255,0.3)',
+      }}
+    >
       {time}
     </div>
   </div>

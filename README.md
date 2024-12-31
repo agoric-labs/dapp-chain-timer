@@ -4,7 +4,7 @@ Dapp-Chain-Timer is a simple Dapp for the [Agoric smart contract platform](https
 
 _Note that this is a example dapp exploring capabilities of ChainTimerService and Agoric VStorage with no consideration made for privacy of information. All entered data maybe publicly visible._
 
-his is the user interface of dapp:
+This is the user interface of dapp:
 
 <p align="center">
     <img src="ui/public/ui-dapp.png" alt="Chain Timer Dapp" width="700">
@@ -26,8 +26,3 @@ demo-agd-1  | 2023-12-27T04:08:08.407Z block-manager: block 1005 commit
 - run `yarn start:ui` to start the smart contract. You can use the link in the output to load the smart contract UI in a browser.
 
 For any troubleshooting please refer to the detailed tutorial at [Here](https://docs.agoric.com/guides/getting-started/).
-
-## Testing
-
-To run the unit test:
-- run `yarn test` to run the unit tests for the contract.
