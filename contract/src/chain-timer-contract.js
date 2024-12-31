@@ -6,18 +6,18 @@ import { TimeMath } from '@agoric/time';
 
 /**
  * @typedef {{
- * maxCertificates: bigint;
- * }} CertificateTerms
+ * maxTime: bigint;
+ * }} TimeTerms
  */
 
 export const meta = {
   customTermsShape: M.splitRecord({
-    maxCertificates: M.bigint(),
+    maxTime: M.bigint(),
   }),
 };
 
 /**
- * @param {ZCF<CertificateTerms>} zcf
+ * @param {ZCF<TimeTerms>} zcf
  */
 export const start = async (zcf, privateArgs) => {
   // Create storage node for time data

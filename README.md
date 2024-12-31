@@ -4,17 +4,11 @@ Dapp-Chain-Timer is a simple Dapp for the [Agoric smart contract platform](https
 
 _Note that this is a example dapp exploring capabilities of ChainTimerService and Agoric VStorage with no consideration made for privacy of information. All entered data maybe publicly visible._
 
-<!-- This is the user interface of dapp:
+his is the user interface of dapp:
 
 <p align="center">
-    <img src="ui/public/ui-dapp.png" alt="Edu Cert Dapp" width="700">
+    <img src="ui/public/ui-dapp.png" alt="Chain Timer Dapp" width="700">
 </p>
-
-This is how the data looks like in VStorage:
-
-<p align="center">
-    <img src="/ui/public//ui-vstorage.png" alt="Edu Cert Dapp" width="500">
-</p> -->
 
 ## Getting started
 - run the `yarn install` command to install any solution dependencies. *Downloading all the required dependencies may take several minutes. The UI depends on the React framework, and the contract depends on the Agoric framework. The packages in this project also have development dependencies for testing, code formatting, and static analysis.*

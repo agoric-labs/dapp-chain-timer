@@ -40,7 +40,7 @@ export const startChainTimerContract = async permittedPowers => {
   const storageNode = await E(chainStorage).makeChildNode('chainTimer');
   const istIssuer = await istIssuerP;
 
-  const terms = { maxCertificates: 100n };
+  const terms = { maxTime: 100n };
 
   // agoricNames gets updated each time; the promise space only once XXXXXXX
   const installation = await chainTimerInstallationP;
