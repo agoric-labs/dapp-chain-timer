@@ -1,23 +1,46 @@
-// @ts-nocheck
+// @ts-check
 import { E, Far } from '@endo/far';
 import { M } from '@endo/patterns';
-import '@agoric/zoe/exported.js';
 import { TimeMath } from '@agoric/time';
+
+/**
+ * @import {TypedPattern} from '@agoric/internal';
+ * @import {StorageNode} from '@agoric/internal/src/lib-chainStorage';
+ * @import {TimerService} from '@agoric/time';
+ * @import {ERef} from '@endo/far';
+ */
 
 /**
  * @typedef {{
  * maxTime: bigint;
  * }} TimeTerms
+ *
+ * @typedef {{
+ *   storageNode: ERef<StorageNode>;
+ *   timerService: ERef<TimerService>;
+ * }} TimePrivateArgs
  */
 
+/** @type {TypedPattern<TimeTerms>} */
+const TimeTermsShape = M.splitRecord({
+  maxTime: M.bigint(),
+});
+
+/** @type {TypedPattern<TimePrivateArgs>} */
+const TimePrivateArgsShape = M.splitRecord({
+  storageNode: M.remotable('StorageNode'),
+  timerService: M.remotable('TimerService'),
+});
+
 export const meta = {
-  customTermsShape: M.splitRecord({
-    maxTime: M.bigint(),
-  }),
+  customTermsShape: TimeTermsShape,
+  privateArgsShape: TimePrivateArgsShape,
 };
+harden(meta);
 
 /**
  * @param {ZCF<TimeTerms>} zcf
+ * @param {TimePrivateArgs} privateArgs
  */
 export const start = async (zcf, privateArgs) => {
   // Create storage node for time data
