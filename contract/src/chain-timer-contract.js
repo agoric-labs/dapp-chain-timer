@@ -6,7 +6,7 @@ import { TimeMath } from '@agoric/time';
 /**
  * @import {TypedPattern} from '@agoric/internal';
  * @import {StorageNode} from '@agoric/internal/src/lib-chainStorage';
- * @import {TimerService} from '@agoric/time';
+ * @import {TimerService, Clock} from '@agoric/time';
  * @import {ERef} from '@endo/far';
  */
 
@@ -17,7 +17,8 @@ import { TimeMath } from '@agoric/time';
  *
  * @typedef {{
  *   storageNode: ERef<StorageNode>;
- *   timerService: ERef<TimerService>;
+ *   clock: ERef<Clock>,
+ *   timerService?: ERef<TimerService>;
  * }} TimePrivateArgs
  */
 
@@ -27,10 +28,15 @@ const TimeTermsShape = M.splitRecord({
 });
 
 /** @type {TypedPattern<TimePrivateArgs>} */
-const TimePrivateArgsShape = M.splitRecord({
-  storageNode: M.remotable('StorageNode'),
-  timerService: M.remotable('TimerService'),
-});
+const TimePrivateArgsShape = M.splitRecord(
+  {
+    storageNode: M.remotable('StorageNode'),
+    clock: M.remotable('Clock'),
+  },
+  {
+    timerService: M.remotable('TimerService'),
+  },
+);
 
 export const meta = {
   customTermsShape: TimeTermsShape,
@@ -46,8 +52,7 @@ export const start = async (zcf, privateArgs) => {
   // Create storage node for time data
   const timeDataRoot = await E(privateArgs.storageNode).makeChildNode('Time');
 
-  const timerBrand = await E(privateArgs.timerService).getTimerBrand();
-  const toRT = value => TimeMath.coerceRelativeTimeRecord(value, timerBrand);
+  const { clock, timerService } = privateArgs;
 
   /**
    * Store time data in VStorage
@@ -55,12 +60,14 @@ export const start = async (zcf, privateArgs) => {
    */
   const storeTimeData = async data => {
     try {
-      const myTime = await E(privateArgs.timerService).getCurrentTimestamp();
+      const myTime = await E(clock).getCurrentTimestamp();
       await E(timeDataRoot).setValue(JSON.stringify(`${myTime.absValue}`));
-      await E(privateArgs.timerService).setWakeup(
-        TimeMath.addAbsRel(myTime, 1n),
-        handler,
-      );
+      if (timerService) {
+        await E(timerService).setWakeup(
+          TimeMath.addAbsRel(myTime, 1n),
+          handler,
+        );
+      }
       return 'Time data published successfully';
     } catch (error) {
       console.error(`Error publishing Time data:${error}`);
@@ -109,12 +116,10 @@ export const start = async (zcf, privateArgs) => {
   // To verify do the following on chain: agd q vstorage data published.chainTimer.Time
   // Function to write the current timestamp every 5 seconds
   const writeTimestampPeriodically = async () => {
+    if (!timerService) return;
     // wake up at least 1 seconds from now:
-    let now = await E(privateArgs.timerService).getCurrentTimestamp();
-    await E(privateArgs.timerService).setWakeup(
-      TimeMath.addAbsRel(now, 1n),
-      handler,
-    );
+    let now = await E(clock).getCurrentTimestamp();
+    await E(timerService).setWakeup(TimeMath.addAbsRel(now, 1n), handler);
   };
 
   // Start the periodic timestamp writing
@@ -130,3 +135,4 @@ export const start = async (zcf, privateArgs) => {
 };
 
 harden(start);
+/** @typedef {typeof start} TimerFn */
