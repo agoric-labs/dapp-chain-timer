@@ -22,7 +22,7 @@ const App: React.FC = () => {
 
       let timestampSeconds = parsedData.toString();
       const date = new Date(timestampSeconds * 1000);
-      setChainTime(date.toUTCString());
+      setChainTime(date.toUTCString().replace('GMT', '\nGMT'));
     };
 
     const intervalId = setInterval(fetchTime, 1000);
@@ -31,7 +31,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const updateClientTime = () => {
-      setClientTime(new Date().toUTCString());
+      setClientTime(new Date().toUTCString().replace('GMT', '\nGMT'));
     };
 
     const clientTimeIntervalId = setInterval(updateClientTime, 1000);
