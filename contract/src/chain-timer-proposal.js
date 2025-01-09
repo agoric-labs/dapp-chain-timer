@@ -47,7 +47,7 @@ export const startChainTimerContract = async permittedPowers => {
   const privateArgs = {
     storageNode,
     clock,
-    timerService: chainTimerService,
+    timerService: await chainTimerService,
   };
 
   const { instance } = await E(startUpgradable)({
