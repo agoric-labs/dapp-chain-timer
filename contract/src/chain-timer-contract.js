@@ -56,7 +56,7 @@ export const start = async (zcf, privateArgs) => {
 
   /**
    * Store time data in VStorage
-   * @param {object} data
+   * @param {object} data this parameter could potentially be used to adjust delay/startTime   etc.
    */
   const storeTimeData = async data => {
     try {

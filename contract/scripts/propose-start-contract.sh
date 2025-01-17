@@ -1,7 +1,7 @@
 #!/bin/bash
 set -xueo pipefail
 
-cd /workspace/contract
+cd /ws-chainTimer/contract
 
 SCRIPT=start-chain-timer.js
 PERMIT=start-chain-timer-permit.json
